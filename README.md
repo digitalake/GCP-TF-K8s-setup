@@ -179,7 +179,7 @@ __Connect kubenode to kubemaster__
 sudo su
 kubeadm join <master-ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
 ```
-__Use the command from kubernetes masternode init [here](https://github.com/digitalake/GCP-TF-K8s-setup/blob/main/README.md?plain=1#L158)__
+__Use the command from kubernetes masternode init__
 
 >NOTE:
 
