@@ -6,12 +6,16 @@ Requirements:
   - 8 GB RAM
   - Ubuntu (only for this task)
   
-In this repo you can find the Terraform code to perform vm creation
+In this repo you can find the Terraform code to perform vm creation.
 
-![image](https://user-images.githubusercontent.com/109740456/215793161-83562dbd-2a5c-469d-8658-d7984b82a3b2.png)
+After running we can have 2 vms deployed to GCP:
+```
+terraform apply
+```
 
+<img src= "https://user-images.githubusercontent.com/109740456/215793161-83562dbd-2a5c-469d-8658-d7984b82a3b2.png" width="400">
 
-![image](https://user-images.githubusercontent.com/109740456/215792942-4b94ed4a-5019-406b-b33e-d70a32db891e.png)
+<img src= "https://user-images.githubusercontent.com/109740456/215792942-4b94ed4a-5019-406b-b33e-d70a32db891e.png" width="800">
 
 ### Start the setup
 
@@ -19,22 +23,30 @@ __Connect to VMs using command:__
 ```
 ssh -i ~/.ssh/<name-of-private-ssh-key> <user>@<host-ip>
 ```
-__Run commands in two VMs (kubemaster and kubenode)__ \
-Commands:
+>NOTE:Run commands in two VMs (kubemaster and kubenode)
+
+__Commands:__
  ```
 sudo apt update
 sudo apt upgrade -y
 ```
 
-Edit the hosts file with the command:
+__Edit the hosts file with the command:__
 ```
 sudo nano /etc/hosts
 ```
-![Знімок екрана_20230131_160026](https://user-images.githubusercontent.com/109740456/215794527-617f9951-5f26-42f2-8010-702089acd345.png)
+__Make sure _hosts_ file contains additional lines in format:__
+```
+<kubemaster-ip>  kubemaster 
+<kubenode-ip>    kubenode
+```
+__In my case vms are connected to the subnetwork with cidr block [10.2.0.0/16], so my file contains such lines:__
 
-Put your private IP address and hostname
+<img src= "https://user-images.githubusercontent.com/109740456/215794527-617f9951-5f26-42f2-8010-702089acd345.png" width="200">
 
-Save and exit
+__Put your private IP address and hostname__
+
+__Save and exit__
 
 __Install the first dependencies with:__
 ```
@@ -60,7 +72,7 @@ __Place kubelet, kubeadm, and kubectl on hold with:__
 ```
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
-![image](https://user-images.githubusercontent.com/109740456/215795307-5899f14b-afe4-4ddc-8df6-747356f93730.png)
+<img src="https://user-images.githubusercontent.com/109740456/215795307-5899f14b-afe4-4ddc-8df6-747356f93730.png" width="650">
 
 __Start and enable the kubelet service with:__
 ```
@@ -142,15 +154,14 @@ __Pull down the necessary container images with:__
 ```
 sudo kubeadm config images pull
 ```
->NOTE!:
-
-__Command only for kubemaster :__
+>NOTE:Command only for kubemaster:
 
 __Now, using the kubemaster IP address initialize the master node with:__
 ```
 sudo kubeadm init --pod-network-cidr=192.168.0.0/16
 ```
-![Знімок екрана_20230131_161347](https://user-images.githubusercontent.com/109740456/215796837-e266b59b-b116-460c-a207-ed13eabf4c6f.png)
+
+<img src="https://user-images.githubusercontent.com/109740456/215796837-e266b59b-b116-460c-a207-ed13eabf4c6f.png" width="650">
 
 __Finally, you need to create a new directory to house a configuration file and give it the proper permissions which is done with the following commands:__
 ```
@@ -162,19 +173,20 @@ __List Kubernetes Nodes:__
 ```
 kubectl get nodes
 ```
-![Знімок екрана_20230131_161451](https://user-images.githubusercontent.com/109740456/215797073-f37b7ca4-0d72-4513-9982-8b44bf5e26ef.png)
+<img src="https://user-images.githubusercontent.com/109740456/215859109-d2f8ef02-5522-4d85-8610-55ea9b18939f.png" width="550">
 
->NOTE!:
-
-__Command only for kubenode :__
+>NOTE:Command only for kubenode:
 
 __Connect kubenode to kubemaster__
 ```
 sudo su
-kubeadm join <master-ip>:6443 --token ut36yh.qd0aeqwaciay05l6 --discovery-token-ca-cert-hash sha256:11111111111111111111111111111111111111111111111111111111111111
+kubeadm join <master-ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
 ```
->NOTE!:
-__Comeback to kubemaster :__
+__Use the command from kubernetes masternode init__
+
+>NOTE:
+
+__Come back to kubemaster :__
 
 __Install network:__
 ```
