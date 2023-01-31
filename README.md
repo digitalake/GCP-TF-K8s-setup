@@ -8,10 +8,7 @@ Requirements:
   
 In this repo you can find the Terraform code to perform vm creation.
 
-After running we can have 2 vms deployed to GCP:
-```
-terraform apply
-```
+After running _terraform apply_ we can have 2 vms deployed to GCP:
 
 <img src= "https://user-images.githubusercontent.com/109740456/215793161-83562dbd-2a5c-469d-8658-d7984b82a3b2.png" width="400">
 
