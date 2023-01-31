@@ -18,7 +18,7 @@ resource "google_compute_instance" "vm_instance" {
   name         = "${var.project_alias}-${each.key}"
   machine_type = each.value.instance_type
   zone         = var.gcp_zone
-  tags         = ["ssh", "http", "rdp", "https", "icmp", "kube"]
+  tags         = ["ssh", "internall-all"]
   boot_disk {
     initialize_params {
       image = each.value.boot_disk_image
