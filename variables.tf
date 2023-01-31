@@ -52,7 +52,7 @@ variable "frwll_src_range" {
   default     = ["0.0.0.0/0"]
 }
 
-# define input variables for vm options 
+# define input variables for vm options
 variable "vms" {
   description = "Map of vm names to configuration."
   type = map(object({
